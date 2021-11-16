@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { API_KEY } from '../globals';
 
 const CoinContext = React.createContext({
 	number: 100,
@@ -7,11 +8,11 @@ const CoinContext = React.createContext({
 });
 
 const useCoins = () => {
-	const { coins, setNumber } = React.useContext(CoinContext);
+	const { coins, setNumber, number } = React.useContext(CoinContext);
 	const handleCoins = (value: number) => {
 		setNumber(value);
 	};
-	return { value: coins, onChange: handleCoins };
+	return { coinList: coins, onChange: handleCoins, value: number };
 };
 
 interface ContextProviderProps {
@@ -20,7 +21,7 @@ interface ContextProviderProps {
 
 const ContextProvider = ({ children }: ContextProviderProps) => {
 	const [coins, setCoins] = React.useState({});
-	const [number, setNumber] = React.useState(100);
+	const [number, setNumber] = React.useState(10);
 	const value = React.useMemo(
 		() => ({ number, setNumber, coins }),
 		[coins, number]
@@ -28,17 +29,21 @@ const ContextProvider = ({ children }: ContextProviderProps) => {
 
 	React.useEffect(() => {
 		async function fetcher() {
-			let response = await fetch(
-				`https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest&limit=${number}`,
-				{
-					method: 'GET',
-					headers: {
-						'X-CMC_PRO_API_KEY':
-							process.env.REACT_APP_API_KEY ?? '',
-					},
-				}
-			);
-			setCoins(response);
+			try {
+				let response = await fetch(
+					`https://cors-anywhere.herokuapp.com/https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=${number}`,
+					{
+						method: 'GET',
+						headers: {
+							'X-CMC_PRO_API_KEY': API_KEY,
+						},
+					}
+				);
+				const parsed = await response.json();
+				setCoins(parsed.data);
+			} catch (e) {
+				console.log('error', e);
+			}
 		}
 		fetcher();
 	}, [number]);
