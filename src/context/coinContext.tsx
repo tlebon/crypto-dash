@@ -2,9 +2,9 @@ import * as React from 'react';
 import { API_KEY } from '../globals';
 
 const CoinContext = React.createContext({
-	number: 100,
+	number: 10, //TODO: consider saving initial value in localStorage
 	setNumber: (x: number) => {},
-	coins: {},
+	coins: [] as Coin[],
 });
 
 const useCoins = () => {
@@ -20,8 +20,8 @@ interface ContextProviderProps {
 }
 
 const ContextProvider = ({ children }: ContextProviderProps) => {
-	const [coins, setCoins] = React.useState({});
-	const [number, setNumber] = React.useState(10);
+	const [coins, setCoins] = React.useState<Coin[]>([]);
+	const [number, setNumber] = React.useState(useCoins().value);
 	const value = React.useMemo(
 		() => ({ number, setNumber, coins }),
 		[coins, number]

@@ -4,7 +4,7 @@ import { DefaultPage } from './DefaultPage';
 
 export const LiquidityPage = () => {
 	const { value, onChange, coinList } = useCoins();
-	console.log(coinList);
+	
 	return (
 		<DefaultPage>
 			<h1> this is the liquidity page</h1>
