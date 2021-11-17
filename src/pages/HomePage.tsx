@@ -37,7 +37,6 @@ export const HomePage = () => {
 	return (
 		<DefaultPage>
 			<>
-				<h1> this is the homepage</h1>
 				<button onClick={() => onChange(value + 5)}>+5 </button>
 				<TableContainer component={Paper}>
 					<Table sx={{ minWidth: 650 }} aria-label="simple table">
