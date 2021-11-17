@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import * as React from 'react';
 import { useCoins } from '../context/coinContext';
+import { toPercent, toUsd } from '../utils/utils';
 import { DefaultPage } from './DefaultPage';
 
 export const HomePage = () => {
@@ -27,10 +28,10 @@ export const HomePage = () => {
 	const rows = coinList.map((coin: Coin) => ({
 		rank: coin.cmc_rank,
 		name: coin.name,
-		price: coin.quote.USD.price,
-		priceChange: coin.quote.USD.percent_change_24h,
-		marketCap: coin.quote.USD.market_cap,
-		volume: coin.quote.USD.volume_24h,
+		price: toUsd(coin.quote.USD.price, 2),
+		priceChange: toPercent(coin.quote.USD.percent_change_24h),
+		marketCap: toUsd(coin.quote.USD.market_cap),
+		volume: toUsd(coin.quote.USD.volume_24h),
 	}));
 
 	// TODO: pagination, moving onChange onto table (probably)
@@ -58,7 +59,9 @@ export const HomePage = () => {
 									}}
 								>
 									{Object.values(row).map((value) => (
-										<TableCell>{value}</TableCell>
+										<TableCell align="left">
+											{value}
+										</TableCell>
 									))}
 								</TableRow>
 							))}
