@@ -44,7 +44,9 @@ export const HomePage = () => {
 						<TableHead>
 							<TableRow>
 								{tableHeadings.map((heading) => (
-									<TableCell>{heading}</TableCell>
+									<TableCell key={heading}>
+										{heading}
+									</TableCell>
 								))}
 							</TableRow>
 						</TableHead>
@@ -59,7 +61,7 @@ export const HomePage = () => {
 									}}
 								>
 									{Object.values(row).map((value) => (
-										<TableCell align="left">
+										<TableCell key={value} align="left">
 											{value}
 										</TableCell>
 									))}

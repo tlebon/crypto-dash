@@ -47,7 +47,6 @@
     ]
   },
   "devDependencies": {
-    "@types/canvasjs": "^1.9.7",
     "@types/react-plotly.js": "^2.5.0"
   }
 }

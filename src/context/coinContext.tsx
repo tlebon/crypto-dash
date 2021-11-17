@@ -31,7 +31,7 @@ const ContextProvider = ({ children }: ContextProviderProps) => {
 		async function fetcher() {
 			try {
 				let response = await fetch(
-					`https://cors-anywhere.herokuapp.com/https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=${number}`,
+					`https://timothy-cors.herokuapp.com/https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=${number}`,
 					{
 						method: 'GET',
 						headers: {
