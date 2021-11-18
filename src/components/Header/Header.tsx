@@ -20,7 +20,7 @@ const StyledNavLink = styled(NavLink)`
 
 export const Header: React.FC = () => {
 	const theme = useTheme();
-	const { value, onChange, coinList } = useCoins();
+	const { value, onChange } = useCoins();
 
 	const activeStyle: CSSProperties = {
 		color: theme.palette.text.primary,

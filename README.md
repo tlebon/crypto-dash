@@ -5,42 +5,41 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Available Scripts
 
 In the project directory, you can run:
-
+### `yarn`
 ### `yarn start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Be sure to add a CMC API key to the env file if you are running locally.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## About this Project
 
-### `yarn test`
+This is a simple dashboard for crypto coins, showing top coins as well as liquidity graphing for coins. 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Thought Process
 
-### `yarn build`
+This project called for some state management solution to store state outside of the two main components to allow the same data to be used on either page. 
+I elected for useContext for this as it seemed like the correct size to handle this amount of data, while I thought something like redux would be too large, and prop drilling didnt seem appropriate to this use case. 
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+I tried to set up my project in a design system way but ultimately as this project is just two pages with basically one component on them each I just went with a pages approach. The table and/or the chart could be separated into their own component and imported to the page, but i think this is better currently. 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+On the topic of charts. I searched forever to no avail until finally landing on plotly, which I think is the best (and maybe only) react chart library that would allow me to solve this task. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+I elected to use mostly MUI where necessary for components to simplify the process. 
 
-### `yarn eject`
+I also realize there are some styling issues. My goal was to get it more or less okay, but with the chart specifically and the amount of time I have already spent on this task I thought it was better to leave some styling issues as a "would like to fix" for now. 
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+For the api call i am using a reverse-proxy i set up on my heroku. It is just a simple repo I found. 
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+I am also deploying the app with vercel: https://crypto-dash-teal.vercel.app/
+### Ideas for extensions
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Styling is the main thing currently that sticks out to me. The header is pretty basic and the page widths/heights are not always exactly correct. 
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+I was also considering caching the api response to save my key from getting run too many times. Also this could help performance. So I would simply only call the fetch on the initial render and then I would save the full state in another context variable and pass back slices of it depending on the context value. I think this is could be a nice improvement (and not so complicated to implement), but I am out of time unfortunately!
 
-## Learn More
+Could add some more options for the table as well. 
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Should definitely add some testing as well. 
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Thank you for your time!
