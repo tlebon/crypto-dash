@@ -6,52 +6,88 @@ import {
 	TableRow,
 	TableCell,
 	TableBody,
+	TableFooter,
+	TablePagination,
+	useMediaQuery,
+	Grid,
 } from '@mui/material';
+import TablePaginationActions from '@mui/material/TablePagination/TablePaginationActions';
+import { styled } from '@mui/system';
 import * as React from 'react';
 import { useCoins } from '../context/coinContext';
-import { toPercent, toUsd } from '../utils/utils';
+import { rowTransformer, toPercent, toUsd } from '../utils/utils';
 import { DefaultPage } from './DefaultPage';
 
+const StyledTableCell = styled(TableCell)`
+	&.MuiTableCell-head {
+		background-color: grey;
+	}
+`;
+
+const tableHeadings = [
+	'Rank',
+	'Name',
+	'Price',
+	'Price Change (24h)',
+	'Market Cap',
+	'Volume (24h)',
+];
+
 export const HomePage = () => {
-	const { value, onChange, coinList } = useCoins();
-	const tableHeadings = [
-		'Rank',
-		'Name',
-		'Price',
-		'Price Change (24h)',
-		'Market Cap',
-		'Volume (24h)',
-	];
+	const { value, coinList } = useCoins();
+	const isTablet = useMediaQuery('(max-width:900px)');
+	const isLarge = useMediaQuery('(min-width:1400px)');
 
-	// TODO: consider moving to its own file for utils
-	// TODO: clean up values - round or turn into strings
-	const rows = coinList.map((coin: Coin) => ({
-		rank: coin.cmc_rank,
-		name: coin.name,
-		price: toUsd(coin.quote.USD.price, 2),
-		priceChange: toPercent(coin.quote.USD.percent_change_24h),
-		marketCap: toUsd(coin.quote.USD.market_cap),
-		volume: toUsd(coin.quote.USD.volume_24h),
-	}));
+	const [page, setPage] = React.useState(0);
+	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-	// TODO: pagination, moving onChange onto table (probably)
+	const rows = rowTransformer(coinList);
+
+	// Avoid a layout jump when reaching the last page with empty rows.
+	const emptyRows =
+		page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
+	const handleChangePage = (
+		event: React.MouseEvent<HTMLButtonElement> | null,
+		newPage: number
+	) => {
+		setPage(newPage);
+	};
+
+	const handleChangeRowsPerPage = (
+		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
+		setRowsPerPage(parseInt(event.target.value, 10));
+		setPage(0);
+	};
+
 	return (
 		<DefaultPage>
-			<>
-				<button onClick={() => onChange(value + 5)}>+5 </button>
+			<Grid mx="1rem" my="1rem" pt="3rem">
 				<TableContainer component={Paper}>
-					<Table sx={{ minWidth: 650 }} aria-label="simple table">
+					<Table
+						sx={{
+							minWidth: isTablet ? 650 : isLarge ? 1300 : 1000,
+						}}
+						aria-label="simple table"
+					>
 						<TableHead>
 							<TableRow>
 								{tableHeadings.map((heading) => (
-									<TableCell key={heading}>
+									<StyledTableCell key={heading}>
 										{heading}
-									</TableCell>
+									</StyledTableCell>
 								))}
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{rows.map((row) => (
+							{(rowsPerPage > 0
+								? rows.slice(
+										page * rowsPerPage,
+										page * rowsPerPage + rowsPerPage
+								  )
+								: rows
+							).map((row) => (
 								<TableRow
 									key={row.name}
 									sx={{
@@ -67,10 +103,47 @@ export const HomePage = () => {
 									))}
 								</TableRow>
 							))}
+							{emptyRows > 0 && (
+								<TableRow style={{ height: 53 * emptyRows }}>
+									<TableCell colSpan={6} />
+								</TableRow>
+							)}
 						</TableBody>
+						{value >= 50 && (
+							<TableFooter>
+								<TableRow>
+									<TablePagination
+										rowsPerPageOptions={[
+											5,
+											10,
+											25,
+											50,
+											{ label: 'All', value: -1 },
+										]}
+										colSpan={6}
+										count={rows.length}
+										rowsPerPage={rowsPerPage}
+										page={page}
+										SelectProps={{
+											inputProps: {
+												'aria-label': 'rows per page',
+											},
+											native: true,
+										}}
+										onPageChange={handleChangePage}
+										onRowsPerPageChange={
+											handleChangeRowsPerPage
+										}
+										ActionsComponent={
+											TablePaginationActions
+										}
+									/>
+								</TableRow>
+							</TableFooter>
+						)}
 					</Table>
 				</TableContainer>
-			</>
+			</Grid>
 		</DefaultPage>
 	);
 };

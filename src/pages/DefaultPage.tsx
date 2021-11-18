@@ -1,18 +1,13 @@
-import { Grid } from '@mui/material';
-import { styled } from '@mui/system';
-import * as React from 'react';
-import { Header } from '../components/molecules/Header/Header';
+import { Box } from '@mui/material';
 
-const PageGrid = styled(Grid)`
-	margin: 2rem;
-	margin-top: 4rem;
-`;
+import * as React from 'react';
+import { Header } from '../components/Header/Header';
 
 export const DefaultPage: React.FC = ({ children }) => {
 	return (
-		<Grid container width="100%" height="100%">
+		<Box maxWidth="100vw" maxHeight="100vh">
 			<Header />
-			<PageGrid>{children}</PageGrid>
-		</Grid>
+			{children}
+		</Box>
 	);
 };
