@@ -32,7 +32,7 @@ export const toUsd = (x: number, fixed = 0): string =>
  */
 export const toPercent = (x: number, fixed = 4) => `${x.toFixed(fixed)}%`;
 
-export const rowTransformer = (array: Coin[]) =>
+export const toRowTransformer = (array: Coin[]) =>
 	array.map((coin: Coin) => ({
 		rank: coin.cmc_rank,
 		name: coin.name,
@@ -41,3 +41,32 @@ export const rowTransformer = (array: Coin[]) =>
 		marketCap: toUsd(coin.quote.USD.market_cap),
 		volume: toUsd(coin.quote.USD.volume_24h),
 	}));
+
+interface chartData {
+	text: string[];
+	x: number[];
+	y: number[];
+	size: number[];
+}
+
+export const toTableData = (array: Coin[]) =>
+	array.reduce(
+		(prev: chartData, curr: Coin) => {
+			const cap = curr.quote.USD.market_cap;
+			const vol = curr.quote.USD.volume_24h;
+			const change = curr.quote.USD.percent_change_24h;
+
+			return {
+				text: [
+					...prev.text,
+					`${curr.name}<br> Cap: ${toUsd(cap)} <br> Vol: ${toUsd(
+						vol
+					)} <br> Change: ${toPercent(change)}`,
+				],
+				x: [...prev.x, cap],
+				y: [...prev.y, vol],
+				size: [...prev.size, Math.abs(change)],
+			};
+		},
+		{ text: [], x: [], y: [], size: [] }
+	);

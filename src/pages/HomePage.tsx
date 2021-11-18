@@ -15,7 +15,7 @@ import TablePaginationActions from '@mui/material/TablePagination/TablePaginatio
 import { styled } from '@mui/system';
 import * as React from 'react';
 import { useCoins } from '../context/coinContext';
-import { rowTransformer, toPercent, toUsd } from '../utils/utils';
+import { toRowTransformer } from '../utils/utils';
 import { DefaultPage } from './DefaultPage';
 
 const StyledTableCell = styled(TableCell)`
@@ -41,7 +41,7 @@ export const HomePage = () => {
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-	const rows = rowTransformer(coinList);
+	const rows = toRowTransformer(coinList);
 
 	// Avoid a layout jump when reaching the last page with empty rows.
 	const emptyRows =

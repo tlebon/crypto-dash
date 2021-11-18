@@ -2,47 +2,16 @@ import * as React from 'react';
 import { useCoins } from '../context/coinContext';
 import { DefaultPage } from './DefaultPage';
 import Plot from 'react-plotly.js';
-import { toPercent, toUsd } from '../utils/utils';
+import { toTableData } from '../utils/utils';
 import { Grid, Paper, useMediaQuery } from '@mui/material';
 
 export const LiquidityPage = () => {
 	const { coinList } = useCoins();
 	const isTablet = useMediaQuery('(max-width:900px)');
-	const isLarge = useMediaQuery('(min-width:1400px)');
+	const isLarge = useMediaQuery('(min-width:1420px)');
 	const desired_maximum_marker_size = 50;
-	interface chartData {
-		text: string[];
-		x: number[];
-		y: number[];
-		size: number[];
-	}
 
-	const data = React.useMemo(
-		() =>
-			coinList.reduce(
-				(prev: chartData, curr: Coin) => {
-					const cap = curr.quote.USD.market_cap;
-					const vol = curr.quote.USD.volume_24h;
-					const change = curr.quote.USD.percent_change_24h;
-
-					return {
-						text: [
-							...prev.text,
-							`${curr.name}<br> Cap: ${toUsd(
-								cap
-							)} <br> Vol: ${toUsd(vol)} <br> Change: ${toPercent(
-								change
-							)}`,
-						],
-						x: [...prev.x, cap],
-						y: [...prev.y, vol],
-						size: [...prev.size, Math.abs(change)],
-					};
-				},
-				{ text: [], x: [], y: [], size: [] }
-			),
-		[coinList]
-	);
+	const data = toTableData(coinList);
 
 	return (
 		<DefaultPage>
@@ -88,7 +57,7 @@ export const LiquidityPage = () => {
 					]}
 					layout={{
 						width: isTablet ? 650 : isLarge ? 1300 : 1100,
-						height: isTablet ? 800 : isLarge ? 1300 : 1100,
+						height: isTablet ? 800 : isLarge ? 800 : 650,
 						title: 'Market Liquidity',
 					}}
 				/>
