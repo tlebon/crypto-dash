@@ -1,16 +1,4 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-### `yarn`
-### `yarn start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-Be sure to add a CMC API key to the env file if you are running locally.
+# Crypto Dash!
 
 ## About this Project
 
@@ -43,3 +31,17 @@ Could add some more options for the table as well.
 Should definitely add some testing as well. 
 
 ## Thank you for your time!
+
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Available Scripts
+
+In the project directory, you can run:
+### `yarn`
+### `yarn start`
+
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Be sure to add a CMC API key to the env file if you are running locally.
+
